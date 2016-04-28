@@ -23,7 +23,7 @@ enum WavesState {
     case Idle, IncreasingAmplitude, ChangingLevel, DecreasingAmplitude
 }
 
-protocol WaterViewDelegate: class {
+protocol WaterViewAnimation: class {
     func increaseWaves()
     func decreaseWaves()
     func changeWaterLevel()
@@ -34,7 +34,7 @@ class WaterView: UIView {
     
     var level = 0.0 {
         didSet {
-            delegate.changeLevel()
+            animator.changeLevel()
         }
     }
     
@@ -43,7 +43,7 @@ class WaterView: UIView {
     private let highAmplitude = WaveAmplitude(minAmplitude: 10, amplitudeIncrement: 3, maxAmplitude: 30)
     private var previousWavesIdleLevel: Double!
     
-    private lazy var delegate: FSM = FSM(delegate: self)
+    private lazy var animator: Animator = Animator(animatedObject: self)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,7 +69,7 @@ class WaterView: UIView {
             fluidView.fillRepeatCount = 0
             fluidView.fillDuration = wavesChangingLevelDuration
             fluidView.complitionBlock = { [weak self] in
-                self!.delegate.currentState = .DecreasingAmplitude
+                self!.animator.currentState = .DecreasingAmplitude
             }
             insertSubview(fluidView, atIndex: 0)
             fluidViews.append(fluidView)
@@ -90,12 +90,12 @@ class WaterView: UIView {
     }
 }
 
-extension WaterView: WaterViewDelegate {
+extension WaterView: WaterViewAnimation {
     
     func increaseWaves() {
         changeWavesAmplitudeTo(highAmplitude)
         NSTimer.scheduledTimerWithTimeInterval(wavesChangingLevelDelay, repeats: false) {
-            self.delegate.currentState = .ChangingLevel
+            self.animator.currentState = .ChangingLevel
         }
     }
     
@@ -111,10 +111,10 @@ extension WaterView: WaterViewDelegate {
         NSTimer.scheduledTimerWithTimeInterval(
             wavesChangingLevelDelay,
             repeats: false) { [weak self] in
-                if self!.delegate.currentState == .DecreasingAmplitude {
+                if self!.animator.currentState == .DecreasingAmplitude {
                     self!.changeWavesAmplitudeTo(self!.lowAmplitude)
                     
-                    self!.delegate.currentState = .Idle
+                    self!.animator.currentState = .Idle
                     self!.previousWavesIdleLevel = self!.level
                 }
         }
@@ -122,7 +122,7 @@ extension WaterView: WaterViewDelegate {
     
     func changeWavesColor() {
         var color: UIColor
-        switch  delegate.currentState {
+        switch  animator.currentState {
             
         case .Idle:
             color = UIColor(rgbColorCodeRed: 6, green: 37, blue: 255, alpha: 1)
@@ -146,11 +146,11 @@ extension WaterView: WaterViewDelegate {
     
 }
 
-class FSM {
+class Animator {
     
-    init(delegate: WaterViewDelegate) {
+    init(animatedObject: WaterViewAnimation) {
         currentState = WavesState.Idle
-        self.delegate = delegate
+        self.animatedObject = animatedObject
     }
     
     private var _currentState = WavesState.Idle
@@ -186,7 +186,7 @@ class FSM {
         }
     }
     
-    private weak var delegate: WaterViewDelegate!
+    private weak var animatedObject: WaterViewAnimation!
     
     func changeLevel() {
         switch (self.currentState){
@@ -212,15 +212,15 @@ class FSM {
             break
             
         case .DecreasingAmplitude:
-            delegate.decreaseWaves()
+            animatedObject.decreaseWaves()
             
         case .IncreasingAmplitude:
-            delegate.increaseWaves()
+            animatedObject.increaseWaves()
             
         case .ChangingLevel:
-            delegate.changeWaterLevel()
+            animatedObject.changeWaterLevel()
         }
-        delegate.changeWavesColor()
+        animatedObject.changeWavesColor()
     }
 }
 
