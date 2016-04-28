@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7703422E1CD11B090098259D /* UIColor+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7703422D1CD11B090098259D /* UIColor+Init.swift */; };
 		775329371CC903F900A260AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775329361CC903F900A260AF /* AppDelegate.swift */; };
 		775329391CC903F900A260AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775329381CC903F900A260AF /* ViewController.swift */; };
 		7753293C1CC903F900A260AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7753293A1CC903F900A260AF /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7703422D1CD11B090098259D /* UIColor+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Init.swift"; sourceTree = "<group>"; };
 		775329331CC903F900A260AF /* StateMachineSwiftTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StateMachineSwiftTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		775329361CC903F900A260AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		775329381CC903F900A260AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -48,6 +50,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7703422C1CD11AEC0098259D /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				7703422D1CD11B090098259D /* UIColor+Init.swift */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
 		7753292A1CC903F900A260AF = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +77,7 @@
 		775329351CC903F900A260AF /* StateMachineSwiftTest */ = {
 			isa = PBXGroup;
 			children = (
+				7703422C1CD11AEC0098259D /* Misc */,
 				77D84ECF1CC9189C00795744 /* StateMachineSwiftTest-Bridging-Header.h */,
 				775329361CC903F900A260AF /* AppDelegate.swift */,
 				775329381CC903F900A260AF /* ViewController.swift */,
@@ -172,6 +183,7 @@
 				775329511CC90EF000A260AF /* UIColor+ColorWithHex.m in Sources */,
 				77D84ED21CC920DD00795744 /* NSTimer+Block.m in Sources */,
 				775329371CC903F900A260AF /* AppDelegate.swift in Sources */,
+				7703422E1CD11B090098259D /* UIColor+Init.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

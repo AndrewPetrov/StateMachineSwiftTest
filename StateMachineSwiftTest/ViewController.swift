@@ -8,14 +8,15 @@
 
 import UIKit
 
-protocol UpdateView: class {
-    func updateView(level: Double)
+protocol UserInterface: class {
+    func updateUI(level: Double)
 }
 
 class ViewController: UIViewController {
     
     @IBOutlet weak var doneGoalsCount: UIStepper!
     @IBOutlet weak var label: UILabel!
+    
     var waterView: WaterView!
     lazy var goalsModel: GoalsModel = GoalsModel(delegate: self)
     
@@ -34,38 +35,27 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: UpdateView {
-    func updateView(level: Double) {
+extension ViewController: UserInterface {
+    func updateUI(level: Double) {
         waterView.level = level
     }
 }
 
 class GoalsModel {
 
-    weak private var delegate: UpdateView!
+    weak private var delegate: UserInterface!
     var level: Double {
         return Double(doneGoalsCount) / Double(totalGoalsCount)
     }
     var doneGoalsCount = 0 {
         didSet {
-            delegate.updateView(level)
+            delegate.updateUI(level)
         }
     }
     private var totalGoalsCount = 10
     
-    init(delegate: UpdateView) {
+    init(delegate: UserInterface) {
         self.delegate = delegate
     }
     
-}
-
-extension UIColor {
-    
-    convenience init(rgbColorCodeRed red: Int, green: Int, blue: Int, alpha: CGFloat) {
-        let redPart = CGFloat(red) / 255
-        let greenPart = CGFloat(green) / 255
-        let bluePart = CGFloat(blue) / 255
-        
-        self.init(red: redPart, green: greenPart, blue: bluePart, alpha: alpha)
-    }
 }

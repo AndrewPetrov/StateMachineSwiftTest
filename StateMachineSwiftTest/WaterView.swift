@@ -13,10 +13,14 @@ let wavesCount = 1
 let wavesChangingLevelDuration = 7.0
 let wavesChangingLevelDelay = 2.0
 
-struct WaveAmplitudes {
+struct WaveAmplitude {
     let minAmplitude: Int
     let amplitudeIncrement: Int
     let maxAmplitude: Int
+}
+
+enum WavesState {
+    case Idle, IncreasingAmplitude, ChangingLevel, DecreasingAmplitude
 }
 
 protocol WaterViewDelegate: class {
@@ -35,9 +39,9 @@ class WaterView: UIView {
     }
     
     private var fluidViews: [BAFluidView]!
-    private let lowWaves = WaveAmplitudes(minAmplitude: 1, amplitudeIncrement: 2, maxAmplitude: 5)
-    private let highWaves = WaveAmplitudes(minAmplitude: 10, amplitudeIncrement: 3, maxAmplitude: 30)
-    private var previousWavesStoppedLevel: Double!
+    private let lowAmplitude = WaveAmplitude(minAmplitude: 1, amplitudeIncrement: 2, maxAmplitude: 5)
+    private let highAmplitude = WaveAmplitude(minAmplitude: 10, amplitudeIncrement: 3, maxAmplitude: 30)
+    private var previousWavesIdleLevel: Double!
     
     private lazy var delegate: FSM = FSM(delegate: self)
     
@@ -70,14 +74,49 @@ class WaterView: UIView {
             insertSubview(fluidView, atIndex: 0)
             fluidViews.append(fluidView)
         }
-        changeWavesAmplitudeTo(lowWaves)
+        changeWavesAmplitudeTo(lowAmplitude)
     }
     
-    private func changeWavesAmplitudeTo(parameters:WaveAmplitudes) {
+    private func changeWavesAmplitudeTo(parameters:WaveAmplitude) {
         for fluidView in fluidViews {
             fluidView.minAmplitude = CInt(parameters.minAmplitude)
             fluidView.amplitudeIncrement = CInt(parameters.amplitudeIncrement)
             fluidView.maxAmplitude = CInt(parameters.maxAmplitude)
+        }
+    }
+    
+    private func showCheckmark() {
+        print("showCheckmark")
+    }
+}
+
+extension WaterView: WaterViewDelegate {
+    
+    func increaseWaves() {
+        changeWavesAmplitudeTo(highAmplitude)
+        NSTimer.scheduledTimerWithTimeInterval(wavesChangingLevelDelay, repeats: false) {
+            self.delegate.currentState = .ChangingLevel
+        }
+    }
+    
+    func changeWaterLevel() {
+        var safeLevel = max(level, 0.01)
+        safeLevel = min(level, 0.99)
+        for fluidView in fluidViews {
+            fluidView.fillTo(NSNumber(double: safeLevel))
+        }
+    }
+    
+    func decreaseWaves() {
+        NSTimer.scheduledTimerWithTimeInterval(
+            wavesChangingLevelDelay,
+            repeats: false) { [weak self] in
+                if self!.delegate.currentState == .DecreasingAmplitude {
+                    self!.changeWavesAmplitudeTo(self!.lowAmplitude)
+                    
+                    self!.delegate.currentState = .Idle
+                    self!.previousWavesIdleLevel = self!.level
+                }
         }
     }
     
@@ -105,43 +144,6 @@ class WaterView: UIView {
         }
     }
     
-    private func showCheckmark() {
-        print("showCheckmark")
-    }
-}
-
-extension WaterView: WaterViewDelegate {
-    func increaseWaves() {
-        changeWavesAmplitudeTo(highWaves)
-        NSTimer.scheduledTimerWithTimeInterval(wavesChangingLevelDelay, repeats: false) {
-            self.delegate.currentState = .ChangingLevel
-        }
-    }
-    
-    func changeWaterLevel() {
-        var safeLevel = max(level, 0.01)
-        safeLevel = min(level, 0.99)
-        for fluidView in fluidViews {
-            fluidView.fillTo(NSNumber(double: safeLevel))
-        }
-    }
-    
-    func decreaseWaves() {
-        NSTimer.scheduledTimerWithTimeInterval(
-            wavesChangingLevelDelay,
-            repeats: false) { [weak self] in
-                if self!.delegate.currentState == .DecreasingAmplitude {
-                    self!.changeWavesAmplitudeTo(self!.lowWaves)
-                    
-                    self!.delegate.currentState = .Idle
-                    self!.previousWavesStoppedLevel = self!.level
-                }
-        }
-    }
-}
-
-enum WavesState {
-    case Idle, IncreasingAmplitude, ChangingLevel, DecreasingAmplitude
 }
 
 class FSM {
@@ -184,7 +186,7 @@ class FSM {
         }
     }
     
-    weak var delegate: WaterViewDelegate!
+    private weak var delegate: WaterViewDelegate!
     
     func changeLevel() {
         switch (self.currentState){
@@ -201,8 +203,6 @@ class FSM {
         default:
             break
         }
-        
-        
     }
     
     private func animateView() {

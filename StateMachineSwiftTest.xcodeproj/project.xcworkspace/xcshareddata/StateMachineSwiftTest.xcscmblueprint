@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "07B8DE98BCF0EE9377B67A9D8716778D512B746C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "28B31D419FFA458C7E5731C38796074028AC75B6" : 0,
+    "07B8DE98BCF0EE9377B67A9D8716778D512B746C" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "0F193255-8012-49E2-989B-BAB54F29C77E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "28B31D419FFA458C7E5731C38796074028AC75B6" : "LiveTodayTimer\/",
+    "07B8DE98BCF0EE9377B67A9D8716778D512B746C" : "StateMachineSwiftTest\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "StateMachineSwiftTest",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "StateMachineSwiftTest.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AndrewPetrov\/StateMachineSwiftTest.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "07B8DE98BCF0EE9377B67A9D8716778D512B746C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git.yalantis.com:andrew.petrov\/LiveTodayTimer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "28B31D419FFA458C7E5731C38796074028AC75B6"
+    }
+  ]
+}
